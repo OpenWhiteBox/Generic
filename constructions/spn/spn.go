@@ -1,35 +1,35 @@
-// Package sas implements a generic SAS block cipher.
+// Package spn implements a generic SPN block ciphers with 128-bit blocks and 8-bit S-boxes.
 //
 // An affine layer, denoted by an A, treats its input as an element of GF(2)^n and applies a fixed, invertible affine
 // transformation over this space. An S-box layer, denoted by an S, applies possibly independent 8-bit S-boxes to
-// consecutive chunks of its input. Therefore, an SAS block cipher is a product cipher with an affine layer between two
-// S-box layers.
+// consecutive chunks of its input. The layers are concatenated as in function composition notation. A block cipher E
+// with structure ASAS implies E = A(S(A(S(x)))).
 //
-// An efficient cryptanalysis of SAS block ciphers is implemented in the cryptanalysis/sas package.
+// An efficient cryptanalysis of these block ciphers is implemented in the cryptanalysis/spn package.
 //
 // "Structural Cryptanalysis of SASAS" by Alex Biryukov and Adi Shamir,
 // https://www.iacr.org/archive/eurocrypt2001/20450392.pdf
-package sas
+package spn
 
 import (
 	"github.com/OpenWhiteBox/primitives/encoding"
 )
 
-type Construction struct {
-	First  encoding.ConcatenatedBlock
-	Affine encoding.BlockAffine
-	Last   encoding.ConcatenatedBlock
-}
+type Structure int
 
-func (constr Construction) cipher() encoding.Block {
-	return encoding.ComposedBlocks{
-		constr.First,
-		constr.Affine,
-		constr.Last,
-	}
-}
+const (
+	AS Structure = iota
+	SA
+	ASA
+	SAS
+	SASA
+	ASAS
+	SASAS
+)
 
-// BlockSize returns the block size of AES. (Necessary to implement cipher.Block.)
+type Construction encoding.ComposedBlocks
+
+// BlockSize returns the block size of the cipher. (Necessary to implement cipher.Block.)
 func (constr Construction) BlockSize() int { return 16 }
 
 // Encrypt encrypts the first block in src into dst. Dst and src may point at the same memory.
@@ -37,7 +37,7 @@ func (constr Construction) Encrypt(dst, src []byte) {
 	temp := [16]byte{}
 	copy(temp[:], src)
 
-	temp = constr.cipher().Encode(temp)
+	temp = encoding.ComposedBlocks(constr).Encode(temp)
 
 	copy(dst, temp[:])
 }
@@ -47,7 +47,7 @@ func (constr Construction) Decrypt(dst, src []byte) {
 	temp := [16]byte{}
 	copy(temp[:], src)
 
-	temp = constr.cipher().Decode(temp)
+	temp = encoding.ComposedBlocks(constr).Decode(temp)
 
 	copy(dst, temp[:])
 }
