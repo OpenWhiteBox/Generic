@@ -72,12 +72,18 @@ func Parse(in []byte, structure Structure) (constr Construction) {
 		parseSBoxLayer(&constr, &rest)
 		parseAffineLayer(&constr, &rest)
 		parseSBoxLayer(&constr, &rest)
+	case ASAS:
+		parseSBoxLayer(&constr, &rest)
+		parseAffineLayer(&constr, &rest)
+		parseSBoxLayer(&constr, &rest)
+		parseAffineLayer(&constr, &rest)
 	case SASA:
 		parseAffineLayer(&constr, &rest)
 		parseSBoxLayer(&constr, &rest)
 		parseAffineLayer(&constr, &rest)
 		parseSBoxLayer(&constr, &rest)
-	case ASAS:
+	case ASASA:
+		parseAffineLayer(&constr, &rest)
 		parseSBoxLayer(&constr, &rest)
 		parseAffineLayer(&constr, &rest)
 		parseSBoxLayer(&constr, &rest)

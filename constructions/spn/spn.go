@@ -5,7 +5,7 @@
 // consecutive chunks of its input. The layers are concatenated as in function composition notation. A block cipher E
 // with structure ASAS implies E = A(S(A(S(x)))).
 //
-// An efficient cryptanalysis of these block ciphers is implemented in the cryptanalysis/spn package.
+// An efficient cryptanalysis of many of these block ciphers is implemented in the cryptanalysis/spn package.
 //
 // "Structural Cryptanalysis of SASAS" by Alex Biryukov and Adi Shamir,
 // https://www.iacr.org/archive/eurocrypt2001/20450392.pdf
@@ -22,8 +22,9 @@ const (
 	SA
 	ASA
 	SAS
-	SASA
 	ASAS
+	SASA
+	ASASA
 	SASAS
 )
 

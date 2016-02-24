@@ -43,13 +43,17 @@ func NewSPN(rand io.Reader, structure Structure) Construction {
 		return Construction(encoding.ComposedBlocks{
 			newSBoxLayer(rand), newAffineLayer(rand), newSBoxLayer(rand),
 		})
+	case ASAS:
+		return Construction(encoding.ComposedBlocks{
+			newSBoxLayer(rand), newAffineLayer(rand), newSBoxLayer(rand), newAffineLayer(rand),
+		})
 	case SASA:
 		return Construction(encoding.ComposedBlocks{
 			newAffineLayer(rand), newSBoxLayer(rand), newAffineLayer(rand), newSBoxLayer(rand),
 		})
-	case ASAS:
+	case ASASA:
 		return Construction(encoding.ComposedBlocks{
-			newSBoxLayer(rand), newAffineLayer(rand), newSBoxLayer(rand), newAffineLayer(rand),
+			newAffineLayer(rand), newSBoxLayer(rand), newAffineLayer(rand), newSBoxLayer(rand), newAffineLayer(rand),
 		})
 	case SASAS:
 		return Construction(encoding.ComposedBlocks{
