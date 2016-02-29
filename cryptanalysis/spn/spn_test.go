@@ -16,8 +16,8 @@ func ExampleDecomposeSPN() {
 	constr2 := DecomposeSPN(constr1, spn.SAS)
 
 	ok := encoding.ProbablyEquivalentBlocks(
-		construction{constr1},
-		construction{constr2},
+		Encoding{constr1},
+		Encoding{constr2},
 	)
 
 	fmt.Println(ok)
@@ -30,8 +30,8 @@ func TestDecomposeAS(t *testing.T) {
 	constr2 := DecomposeSPN(constr1, spn.AS)
 
 	ok := encoding.ProbablyEquivalentBlocks(
-		construction{constr1},
-		construction{constr2},
+		Encoding{constr1},
+		Encoding{constr2},
 	)
 
 	if !ok {
@@ -44,8 +44,8 @@ func TestDecomposeSA(t *testing.T) {
 	constr2 := DecomposeSPN(constr1, spn.SA)
 
 	ok := encoding.ProbablyEquivalentBlocks(
-		construction{constr1},
-		construction{constr2},
+		Encoding{constr1},
+		Encoding{constr2},
 	)
 
 	if !ok {
@@ -58,8 +58,8 @@ func TestDecomposeASA(t *testing.T) {
 	constr2 := DecomposeSPN(constr1, spn.ASA)
 
 	ok := encoding.ProbablyEquivalentBlocks(
-		construction{constr1},
-		construction{constr2},
+		Encoding{constr1},
+		Encoding{constr2},
 	)
 
 	if !ok {
@@ -72,8 +72,8 @@ func TestDecomposeSAS(t *testing.T) {
 	constr2 := DecomposeSPN(constr1, spn.SAS)
 
 	ok := encoding.ProbablyEquivalentBlocks(
-		construction{constr1},
-		construction{constr2},
+		Encoding{constr1},
+		Encoding{constr2},
 	)
 
 	if !ok {
@@ -86,8 +86,8 @@ func TestDecomposeASAS(t *testing.T) {
 	constr2 := DecomposeSPN(constr1, spn.ASAS)
 
 	ok := encoding.ProbablyEquivalentBlocks(
-		construction{constr1},
-		construction{constr2},
+		Encoding{constr1},
+		Encoding{constr2},
 	)
 
 	if !ok {
@@ -100,8 +100,8 @@ func TestDecomposeSASA(t *testing.T) {
 	constr2 := DecomposeSPN(constr1, spn.SASA)
 
 	ok := encoding.ProbablyEquivalentBlocks(
-		construction{constr1},
-		construction{constr2},
+		Encoding{constr1},
+		Encoding{constr2},
 	)
 
 	if !ok {
@@ -118,8 +118,8 @@ func TestDecomposeSASAS(t *testing.T) {
 	constr2 := DecomposeSPN(constr1, spn.SASAS)
 
 	ok := encoding.ProbablyEquivalentBlocks(
-		construction{constr1},
-		construction{constr2},
+		Encoding{constr1},
+		Encoding{constr2},
 	)
 
 	if !ok {

@@ -59,14 +59,12 @@ func decomposeSPN(cipher encoding.Block, structure spn.Structure) (out spn.Const
 	switch structure {
 	case spn.AS:
 		last, rest := RecoverAffine(cipher, trivialSubspaces)
-		return spn.Construction(encoding.ComposedBlocks{
-			encoding.DecomposeConcatenatedBlock(rest), last,
-		})
+		first := encoding.DecomposeConcatenatedBlock(rest)
+		return spn.Construction(encoding.ComposedBlocks{first, last})
 	case spn.SA:
 		last, rest := RecoverSBoxes(cipher, BalancedPlaintexts(4))
-		return spn.Construction(encoding.ComposedBlocks{
-			encoding.DecomposeBlockAffine(rest), last,
-		})
+		first, _ := encoding.DecomposeBlockAffine(rest)
+		return spn.Construction(encoding.ComposedBlocks{first, last})
 	case spn.ASA:
 		last, rest := RecoverAffine(cipher, lowRankDetection)
 		return append(decomposeSPN(rest, spn.SA), last)
