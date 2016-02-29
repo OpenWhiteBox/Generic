@@ -36,22 +36,22 @@ type Construction interface {
 	Encrypt([]byte, []byte)
 }
 
-// construction implements encoding.Block over a Construction to make some code simpler. Decode can not be called.
-type construction struct{ Construction }
+// Encoding implements encoding.Block over a Construction to make some code simpler. Decode can not be called.
+type Encoding struct{ Construction }
 
-func (c construction) Encode(in [16]byte) (out [16]byte) {
-	c.Construction.Encrypt(out[:], in[:])
+func (e Encoding) Encode(in [16]byte) (out [16]byte) {
+	e.Construction.Encrypt(out[:], in[:])
 	return
 }
 
-func (c construction) Decode(in [16]byte) (out [16]byte) {
-	panic("cryptanalysis/spn.encoding.Decode should never be called!")
+func (e Encoding) Decode(in [16]byte) (out [16]byte) {
+	panic("cryptanalysis/spn.Encoding.Decode should never be called!")
 }
 
 // DecomposeSPN takes a Construction with a specified structure as input and outputs a functionally identical
 // constructions/spn.Construction, with which you can Encrypt, Decrypt, inspect internal constants, etc.
 func DecomposeSPN(constr Construction, structure spn.Structure) (out spn.Construction) {
-	cipher := construction{constr}
+	cipher := Encoding{constr}
 	return decomposeSPN(cipher, structure)
 }
 

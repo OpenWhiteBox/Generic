@@ -54,7 +54,7 @@ func trivialSubspaces(cipher encoding.Block) (subspaces []matrix.IncrementalMatr
   for pos := 0; pos < 16; pos++ {
     subspace := matrix.NewIncrementalMatrix(128)
 
-    for i := 0; i < 129 && subspace.Len() < 120; i++ {
+    for i := 0; i < 256 && subspace.Len() < 120; i++ {
       x, y := [16]byte{}, [16]byte{}
       rand.Read(x[:])
       rand.Read(y[:])
