@@ -66,13 +66,13 @@ func decomposeSPN(cipher encoding.Block, structure spn.Structure) (out spn.Const
 		first, _ := encoding.DecomposeBlockAffine(rest)
 		return spn.Construction(encoding.ComposedBlocks{first, last})
 	case spn.ASA:
-		last, rest := RecoverAffine(cipher, lowRankDetection)
+		last, rest := RecoverAffine(cipher, lowRankDetectionWith(nextByAddition))
 		return append(decomposeSPN(rest, spn.SA), last)
 	case spn.SAS:
 		last, rest := RecoverSBoxes(cipher, DualPlaintexts(4))
 		return append(decomposeSPN(rest, spn.AS), last)
 	case spn.ASAS:
-		last, rest := RecoverAffine(cipher, lowRankDetection)
+		last, rest := RecoverAffine(cipher, lowRankDetectionWith(nextByToggle))
 		return append(decomposeSPN(rest, spn.SAS), last)
 	case spn.SASA:
 		last, rest := RecoverSBoxes(cipher, PermutationPlaintexts(256))

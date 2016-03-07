@@ -75,9 +75,42 @@ func trivialSubspaces(cipher encoding.Block) (subspaces []matrix.IncrementalMatr
 	return
 }
 
+type nextFunc func(int, int, [16]byte, [16]byte) ([16]byte, [16]byte)
+
+// nextByAddition generates subsequent plaintexts by adding a random constant.
+func nextByAddition(iteration, marker int, x, y [16]byte) (X, Y [16]byte) {
+	copy(X[:], x[:])
+	copy(Y[:], y[:])
+
+	c := [16]byte{}
+	rand.Read(c[:])
+
+	encoding.XOR(X[:], X[:], c[:])
+	encoding.XOR(Y[:], Y[:], c[:])
+
+	return X, Y
+}
+
+// nextByToggle generates subsequent plaintexts by toggling the value of a position.
+func nextByToggle(iteration, marker int, x, y [16]byte) (X, Y [16]byte) {
+	copy(X[:], x[:])
+	copy(Y[:], y[:])
+
+	X[marker%16], Y[marker%16] = byte(iteration), byte(iteration)
+
+	return
+}
+
+// lowRankDetectionWith is a wrapper around lowRankDetection which injects the right next function
+func lowRankDetectionWith(next nextFunc) func(encoding.Block) []matrix.IncrementalMatrix {
+	return func(cipher encoding.Block) []matrix.IncrementalMatrix {
+		return lowRankDetection(cipher, next)
+	}
+}
+
 // lowRankDetection generates subspaces by choosing random pairs of inputs and checking if the linear span of their
 // output is the right size.
-func lowRankDetection(cipher encoding.Block) (subspaces []matrix.IncrementalMatrix) {
+func lowRankDetection(cipher encoding.Block, next nextFunc) (subspaces []matrix.IncrementalMatrix) {
 	for attempt := 0; attempt < 2000 && len(subspaces) < 16; attempt++ {
 		// Generate a random subspace.
 		x, y := [16]byte{}, [16]byte{}
@@ -87,7 +120,7 @@ func lowRankDetection(cipher encoding.Block) (subspaces []matrix.IncrementalMatr
 		subspace := matrix.NewIncrementalMatrix(128)
 
 		for i := 0; i < 129 && subspace.Len() <= 120; i++ {
-			x[attempt%16], y[attempt%16] = byte(i), byte(i)
+			x, y = next(i, attempt, x, y)
 			X, Y := cipher.Encode(x), cipher.Encode(y)
 
 			subspace.Add(matrix.Row(X[:]).Add(matrix.Row(Y[:])))
