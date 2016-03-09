@@ -111,7 +111,7 @@ func lowRankDetectionWith(next nextFunc) func(encoding.Block) []matrix.Increment
 // lowRankDetection generates subspaces by choosing random pairs of inputs and checking if the linear span of their
 // output is the right size.
 func lowRankDetection(cipher encoding.Block, next nextFunc) (subspaces []matrix.IncrementalMatrix) {
-	for attempt := 0; attempt < 2000 && len(subspaces) < 16; attempt++ {
+	for attempt := 0; attempt < 4000 && len(subspaces) < 16; attempt++ {
 		// Generate a random subspace.
 		x, y := [16]byte{}, [16]byte{}
 		rand.Read(x[:])
